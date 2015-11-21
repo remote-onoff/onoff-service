@@ -1,0 +1,18 @@
+{
+  "name": "onoff-service",
+  "description": "The onoff service.",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node bld/example.js",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "express": "3.x",
+    "node-wol": "^0.1.1"
+  },
+  "devDependencies": {
+    "tsd": "^0.6.5",
+    "typescript": "^1.6.2"
+  }
+}
