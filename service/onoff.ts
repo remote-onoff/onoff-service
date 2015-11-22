@@ -1,10 +1,13 @@
 /// <reference path="../typings/express/express.d.ts" />
 /// <reference path="../typings/node/node.d.ts" />
+/// <reference path="../typings/jssha/jssha.d.ts" />
+
 
 //import express = require('express');
 
 import * as express from "express";
 import * as wolapi from "node-wol";
+import * as jssha from "jssha";
 
 const TokenTimeFrame = 60;
 
@@ -26,8 +29,11 @@ export class Computer {
     }
 }
 
+
 function DoHash(input:string) {
-    return input;
+    let src = new jssha("SHA-256", "TEXT");
+    src.update(input);
+    return src.getHash("HEX");
 }
 
 function MakeToken(ts:TokenSource, secret:string, action:string) {
@@ -59,6 +65,7 @@ class TokenSource {
 class ComputerStatus {
     id:number;
     active:boolean;
+    connected:boolean;
 }
 
 class ComputerInfo {
