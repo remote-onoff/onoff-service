@@ -72,6 +72,13 @@ class Response<R> {
     res:R;
 }
 
+class ServiceInfo {
+    version:number = 1;
+    supportedVersions: number[] = [
+        1
+    ]
+}
+
 export class OnoffApp {
     private secret:string;
     
@@ -80,12 +87,17 @@ export class OnoffApp {
         this.secret = secret;
         let self = this;
         
-        app.get('/token', function(req, res) {
+        app.get('/version', function(req, res) {
+           res.send(new ServiceInfo()); 
+        });
+        
+        app.get('/v1/token', function(req, res) {
             //res.send([{name:'wine1'}, {name:'wine2'}]);
             let token = new TokenSource(secret);
             res.send(token);
         });
-        app.get('/list/:token/:salt', function(req, res, next) {
+        
+        app.get('/v1/list/:token/:salt', function(req, res, next) {
             let token:string = req.params.token;
             let salt:string = req.params.salt;
             
@@ -99,18 +111,27 @@ export class OnoffApp {
             res.send(cis);
         });
         
-        app.get('/status/:id/:token/:salt', function(req, res) {
+        app.get('/v1/status/:id/:token/:salt', function(req, res, next) {
             //res.send({id:req.params.id, name: "The Name", description: "description"});
+            let id:number = req.params.id;
+            let token:string = req.params.token;
+            let salt:string = req.params.salt;
             
+            if (!self.checkToken(token, salt, "status/" + id)) {
+                return next(new Error("Invalid token!"));
+            }
+            
+            if (!(id in computers)) {
+                return next(new Error("Invalid id!"))
+            }
+        });
+        app.get('/v1/boot/:id/:token/:salt', function(req, res) {
             
         });
-        app.get('/boot/:id/:token/:salt', function(req, res) {
+        app.get('/v1/shutdown/:id/:token/:salt', function(req, res) {
             
         });
-        app.get('/shutdown/:id/:token/:salt', function(req, res) {
-            
-        });
-        app.get('/sleep/:id/:token/:salt', function(req, res) {
+        app.get('/v1/sleep/:id/:token/:salt', function(req, res) {
             
         });
         
