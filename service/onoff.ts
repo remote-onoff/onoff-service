@@ -86,6 +86,11 @@ export class OnoffApp {
         var app = express();
         this.secret = secret;
         let self = this;
+        app.use('/', function(req, res, next) {
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "X-Requested-With");
+            next();
+        });
         
         app.get('/version', function(req, res) {
            res.send(new ServiceInfo()); 
