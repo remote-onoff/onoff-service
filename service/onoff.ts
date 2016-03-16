@@ -1,12 +1,5 @@
-/// <reference path="../typings/express/express.d.ts" />
-/// <reference path="../typings/node/node.d.ts" />
-/// <reference path="../typings/jssha/jssha.d.ts" />
-
-
-//import express = require('express');
-
 import * as express from "express";
-import * as wolapi from "node-wol";
+import * as wolapi from "wake_on_lan";
 import * as jssha from "jssha";
 
 const TokenTimeFrame = 60;
